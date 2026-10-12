@@ -10,7 +10,7 @@ import { Cliente, ClienteRequest, TipoCliente } from '../../core/models';
   template: `
     <div class="page">
       <div class="section-head">
-        <div><h2>Clientes</h2><p>Autônomos e profissionais liberais atendidos pelo ContabilIT.</p></div>
+        <div><h2>Clientes Tech & TI</h2><p>Desenvolvedores, engenheiros de software, consultores e startups atendidos pelo ContabilIT.</p></div>
       </div>
       <div class="form-grid four">
         <input [(ngModel)]="nome" placeholder="Nome / razão social">

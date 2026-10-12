@@ -1,23 +1,6 @@
-# --- Backend (Maven/Java) ---
-backend/target/
-backend/data/
-backend/storage/
-*.class
-*.jar
-!.mvn/wrapper/maven-wrapper.jar
-
-# --- Frontend (Angular/Node) ---
-frontend/node_modules/
-frontend/dist/
-frontend/.angular/
-frontend/npm-debug.log*
-frontend/.env
-
-# --- IDEs ---
-.idea/
-.vscode/
-*.iml
-
-# --- Sistema operacional ---
-.DS_Store
-Thumbs.db
+node_modules/
+dist/
+.angular/
+storage/
+data/
+*.log

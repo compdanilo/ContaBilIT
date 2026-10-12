@@ -78,9 +78,9 @@ const db = {
   clientes: [
     {
       id: 1,
-      nome: 'Silva & Santos Tecnologia Ltda',
+      nome: 'Danilo Silva Software & Cloud Ltda',
       cpfCnpj: '12345678000195',
-      email: 'contato@silvasantos.com.br',
+      email: 'contato@danilosoftware.tech',
       telefone: '11987654321',
       tipo: 'PESSOA_JURIDICA',
       ativo: true,
@@ -88,9 +88,9 @@ const db = {
     },
     {
       id: 2,
-      nome: 'Padaria e Confeitaria Aurora ME',
+      nome: 'ByteCraft DevOps & SRE Consultoria ME',
       cpfCnpj: '98765432000110',
-      email: 'financeiro@padariaaurora.com.br',
+      email: 'contato@bytecraft.io',
       telefone: '11912345678',
       tipo: 'PESSOA_JURIDICA',
       ativo: true,
@@ -131,70 +131,70 @@ const db = {
       id: 1,
       clienteId: 1,
       competenciaId: 1,
-      nomeArquivo: 'NF-e_Servicos_092026.pdf',
+      nomeArquivo: 'NFS-e_Desenvolvimento_Software_SP_092026.pdf',
       tipo: 'NOTA_FISCAL',
       status: 'VALIDADO',
       dataDocumento: '2026-09-15',
-      valor: 14500.0,
-      identificador: 'NFE-352609-12345678000195-55-001',
+      valor: 16500.0,
+      identificador: 'NFSE-SP-6201-0926-001',
       enviadoEm: '2026-09-16T11:20:00Z',
-      observacao: 'Conferido com extrato bancário',
+      observacao: 'CNAE 62.01-5-01 - Desenvolvimento de sistemas conferido.',
       caminhoArquivo: null
     },
     {
       id: 2,
       clienteId: 1,
       competenciaId: 1,
-      nomeArquivo: 'Comprovante_DAS_092026.pdf',
+      nomeArquivo: 'Comprovante_DAS_Simples_Nacional_092026.pdf',
       tipo: 'COMPROVANTE',
       status: 'VALIDADO',
       dataDocumento: '2026-09-20',
-      valor: 870.0,
-      identificador: 'COMP-DAS-202609',
+      valor: 990.0,
+      identificador: 'DAS-SIMPLES-TI-0926',
       enviadoEm: '2026-09-21T09:10:00Z',
-      observacao: 'Tributo quitado',
+      observacao: 'Tributo quitado - Anexo III aplicado via Fator R.',
       caminhoArquivo: null
     },
     {
       id: 3,
       clienteId: 1,
       competenciaId: 2,
-      nomeArquivo: 'NF-e_Mensalidade_102026.pdf',
+      nomeArquivo: 'NFS-e_Consultoria_Engenharia_Software_102026.pdf',
       tipo: 'NOTA_FISCAL',
       status: 'VALIDADO',
       dataDocumento: '2026-10-05',
-      valor: 15200.0,
-      identificador: 'NFE-352610-12345678000195-55-002',
+      valor: 18200.0,
+      identificador: 'NFSE-SP-6201-1026-002',
       enviadoEm: '2026-10-06T14:15:00Z',
-      observacao: null,
+      observacao: 'Nota fiscal de serviços de tecnologia validada.',
       caminhoArquivo: null
     },
     {
       id: 4,
       clienteId: 1,
       competenciaId: 2,
-      nomeArquivo: 'Recibo_Consultoria.pdf',
+      nomeArquivo: 'Invoice_Contrato_Remessa_Exterior_Deel.pdf',
       tipo: 'RECIBO',
       status: 'PENDENTE',
       dataDocumento: null,
-      valor: 1200.0,
-      identificador: 'REC-2026-88',
+      valor: 4200.0,
+      identificador: 'INV-DEEL-OCT-26',
       enviadoEm: '2026-10-08T16:00:00Z',
-      observacao: 'Pendente preenchimento da data do documento',
+      observacao: 'Pendente anexar o comprovante de liquidação de câmbio da remessa em USD.',
       caminhoArquivo: null
     },
     {
       id: 5,
       clienteId: 2,
       competenciaId: 3,
-      nomeArquivo: 'Fatura_Fornecedor_Farinha.pdf',
+      nomeArquivo: 'Fatura_AWS_Amazon_Web_Services_102026.pdf',
       tipo: 'DOCUMENTO_FISCAL',
       status: 'EM_ANALISE',
       dataDocumento: '2026-10-03',
-      valor: 3450.0,
-      identificador: 'FAT-2026-099',
+      valor: 850.0,
+      identificador: 'AWS-INV-993821',
       enviadoEm: '2026-10-04T10:00:00Z',
-      observacao: 'Verificar se corresponde a insumos de panificação',
+      observacao: 'Despesa de servidores e cloud computing.',
       caminhoArquivo: null
     }
   ],
@@ -203,8 +203,8 @@ const db = {
       id: 1,
       competenciaId: 1,
       tipo: 'RECEITA',
-      descricao: 'Serviços prestados de software',
-      valor: 14500.0,
+      descricao: 'NFS-e 401: Desenvolvimento de Sistemas e APIs',
+      valor: 16500.0,
       vencimento: '2026-09-15',
       pago: true
     },
@@ -212,8 +212,8 @@ const db = {
       id: 2,
       competenciaId: 1,
       tipo: 'DESPESA',
-      descricao: 'DAS Simples Nacional 09/2026',
-      valor: 870.0,
+      descricao: 'DAS Simples Nacional (Anexo III via Fator R)',
+      valor: 990.0,
       vencimento: '2026-09-20',
       pago: true
     },
@@ -221,7 +221,7 @@ const db = {
       id: 3,
       competenciaId: 1,
       tipo: 'DESPESA',
-      descricao: 'Hospedagem em nuvem',
+      descricao: 'Hospedagem em nuvem (AWS & Vercel)',
       valor: 450.0,
       vencimento: '2026-09-25',
       pago: true
@@ -230,8 +230,8 @@ const db = {
       id: 4,
       competenciaId: 2,
       tipo: 'RECEITA',
-      descricao: 'Contrato recorrente de desenvolvimento',
-      valor: 15200.0,
+      descricao: 'NFS-e 402: Engenharia de Software e Squad Tech',
+      valor: 18200.0,
       vencimento: '2026-10-05',
       pago: true
     },
@@ -239,8 +239,8 @@ const db = {
       id: 5,
       competenciaId: 2,
       tipo: 'DESPESA',
-      descricao: 'Prolabore sócios',
-      valor: 6000.0,
+      descricao: 'Pró-labore Sócios (Enquadramento Fator R 28%)',
+      valor: 5100.0,
       vencimento: '2026-10-10',
       pago: true
     },
@@ -248,8 +248,8 @@ const db = {
       id: 6,
       competenciaId: 3,
       tipo: 'DESPESA',
-      descricao: 'Farinha e ingredientes panificação',
-      valor: 3450.0,
+      descricao: 'Fatura AWS e Ferramentas Tech (GitHub Enterprise, Figma)',
+      valor: 850.0,
       vencimento: '2026-10-15',
       pago: false
     }
@@ -260,7 +260,7 @@ const db = {
       competenciaId: 1,
       documentoId: null,
       tipo: 'INFORMACAO_NECESSARIA',
-      descricao: 'Confirmado fechamento fiscal sem ressalvas.',
+      descricao: 'Fechamento fiscal e apuração do Simples Nacional Anexo III concluídos sem ressalvas.',
       status: 'RESOLVIDA',
       criadaEm: '2026-09-22T10:00:00Z',
       resolvidaEm: '2026-09-25T11:00:00Z'
@@ -270,7 +270,7 @@ const db = {
       competenciaId: 2,
       documentoId: 4,
       tipo: 'INFORMACAO_NECESSARIA',
-      descricao: 'Documento sem data. Favor informar a data de emissão.',
+      descricao: 'Pendente anexar o contrato de câmbio / liquidação da remessa internacional em USD (Deel).',
       status: 'ABERTA',
       criadaEm: '2026-10-08T16:01:00Z',
       resolvidaEm: null
@@ -280,7 +280,7 @@ const db = {
       competenciaId: 3,
       documentoId: 5,
       tipo: 'DOCUMENTO_INCONSISTENTE',
-      descricao: 'Identificar comprovante de pagamento correspondente.',
+      descricao: 'Confirmar comprovante de pagamento da fatura de serviços de computação em nuvem AWS.',
       status: 'EM_ANALISE',
       criadaEm: '2026-10-04T10:05:00Z',
       resolvidaEm: null
@@ -292,14 +292,14 @@ const db = {
       competenciaId: 1,
       geradoEm: '2026-09-28T15:00:00Z',
       status: 'VALIDADO',
-      observacoes: 'Competência validada e conferida pelo contador.'
+      observacoes: 'Competência validada: apuração Simples Nacional com Fator R atendido (28%).'
     },
     {
       id: 2,
       competenciaId: 2,
       geradoEm: '2026-10-10T11:30:00Z',
       status: 'GERADO',
-      observacoes: 'Relatório prévio gerado automaticamente.'
+      observacoes: 'Relatório prévio gerado: aguardando comprovante de câmbio para encerramento.'
     }
   ]
 };

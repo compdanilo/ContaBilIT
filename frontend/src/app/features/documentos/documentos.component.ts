@@ -13,12 +13,12 @@ const MESES = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
   template: `
     <div class="page">
       <div class="section-head">
-        <div><h2>Documentos</h2><p>Envie os documentos do cliente para a competência correspondente.</p></div>
+        <div><h2>Documentos Fiscais TI</h2><p>Envie NFS-e de desenvolvimento, Invoices de remessas internacionais, DAS e comprovantes de despesas de TI.</p></div>
       </div>
       <div class="upload" (dragover)="$event.preventDefault()">
         <div class="form-grid two" style="margin-bottom:16px">
           <select *ngIf="auth.ehContadorOuAdmin()" [(ngModel)]="clienteId" (ngModelChange)="carregarCompetencias()">
-            <option [ngValue]="null" disabled>Selecione o cliente</option>
+            <option [ngValue]="null" disabled>Selecione o cliente PJ</option>
             <option *ngFor="let c of clientes" [ngValue]="c.id">{{ c.nome }}</option>
           </select>
           <select [(ngModel)]="competenciaId">
@@ -27,10 +27,10 @@ const MESES = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
           </select>
         </div>
         <div class="upload-icon">↑</div>
-        <h3>Envie os documentos</h3>
-        <p>Notas fiscais, comprovantes, recibos e outros documentos fiscais.</p>
+        <h3>Envie os documentos fiscais da sua empresa de TI</h3>
+        <p>NFS-e de software (CNAE 6201/6202), Invoices de contratos internacionais (Deel, Wise), DAS Simples Nacional e faturas de cloud/SaaS.</p>
         <input #fileInput type="file" multiple [disabled]="!clienteId || !competenciaId" (change)="upload(fileInput)">
-        <span *ngIf="loading">Processando...</span>
+        <span *ngIf="loading">Processando e extraindo dados...</span>
       </div>
       <p class="danger" *ngIf="erro">{{ erro }}</p>
       <div class="panel">

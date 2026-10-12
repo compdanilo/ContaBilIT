@@ -1,128 +1,141 @@
-# ContabilIT — v0.3
+# ContaBilIT — v1.0
 
-> Facilite sua vida contábil.
+> **Automação contábil especializada para profissionais, desenvolvedores e consultorias de TI (PJ & Tech).**
 
-Produto da BuritiT Solutions: automação do trabalho operacional/repetitivo da
-contabilidade para autônomos e profissionais liberais, com validação humana do contador.
+O **ContaBilIT** é uma plataforma que automatiza o fluxo operacional repetitivo da contabilidade para o ecossistema tech (desenvolvedores PJ, engenheiros de software, consultores DevOps/SRE e startups), combinando validação determinística de documentos e supervisão humana do contador.
 
-Fluxo: **Cliente → Competência → Documentos/Lançamentos → Validações → Pendências → Relatório → Revisão do contador → Validado/Devolvido**.
+---
 
-## Novidades da v0.3
+## 🎯 Foco em Profissionais de TI
 
-1. **Autenticação por papel** (ADMIN / CONTADOR / CLIENTE) via JWT stateless. CLIENTE só
-   enxerga e opera os próprios dados (escopo aplicado no backend, não só escondido na tela).
-2. **Extração real de dados do documento** — sem OCR/IA: XML de NF-e é lido como XML
-   estruturado (valor, data, chave de acesso); PDFs com camada de texto têm o texto
-   extraído (Apache PDFBox) e varrido por padrões de valor/data. Documentos sem texto
-   extraível (ex.: imagem escaneada) seguem para revisão manual, como já acontecia.
-3. **Storage separado do banco** — arquivos vão para disco (`./storage` por padrão), o
-   banco guarda só o caminho. Endpoint de download: `GET /documentos/{id}/arquivo`.
+A rotina fiscal e contábil de profissionais de tecnologia possui particularidades cruciais que o ContaBilIT resolve de ponta a ponta:
 
-## Stack
+* **Apuração e Monitoramento do Fator R**: Cálculo entre folha/pró-labore e receita bruta para garantir enquadramento no **Anexo III (alíquota a partir de 6%)** do Simples Nacional, evitando a tributação onerosa do Anexo V (15,5%+).
+* **NFS-e de Serviços de Software e Consultoria**: Suporte nativo aos principais CNAEs de tecnologia (62.01-5/01 - Desenvolvimento de Programas, 62.02-3/00 - Consultoria em TI, 62.03-1/00 e suporte).
+* **Exportação de Serviços e Invoices Internacionais**: Tratamento de remessas e contratos do exterior (Deel, Wise, Payoneer, contratos em USD/EUR) com orientação para isenções de PIS, COFINS e ISS.
+* **Despesas Operacionais Tech**: Conciliação de custos típicos de empresas de tecnologia (faturas de nuvem AWS/GCP/Azure, licenças SaaS como GitHub, JetBrains, Figma e coworking).
 
-Angular 20 (standalone components) + Spring Boot 3.5 / Java 17 + H2 + Spring Security (JWT) + PDFBox. API REST versionada em `/api/v1`.
+---
 
-## Executar backend
+## 🚀 Principais Funcionalidades da Versão 1.0
 
-Requer Java 17+ (LTS) e Maven.
+1. **Autenticação e RBAC Estrito (JWT)**:
+   * **ADMIN**: Gestão completa de usuários, clientes, competências, documentos e relatórios.
+   * **CONTADOR**: Gestão operacional de múltiplos clientes de TI, validação de documentos, aprovação de relatórios e abertura de pendências.
+   * **CLIENTE (Dev/PJ)**: Visão isolada e restrita exclusivamente aos seus próprios dados, envio de NFS-e/invoices e acompanhamento do fechamento contábil.
+2. **Extração Determinística de Documentos (Sem dependência de OCR/IA)**:
+   * **XML de NF-e/NFS-e**: Leitura direta das tags oficiais da Receita (valor `vNF`, data de emissão `dhEmi`/`dEmi` e chave de acesso `Id`).
+   * **PDF com Camada de Texto**: Extração automatizada via Apache PDFBox com expressões regulares para identificação de valores e datas.
+   * Documentos sem dados identificáveis seguem para fila de revisão assistida pelo contador.
+3. **Validação Automática e Gestão de Pendências**:
+   * Checagem de integridade, valores, datas, coerência com a competência e detecção de duplicidade por identificador fiscal.
+   * Disparo automático de pendências com status rastreável (`ABERTA` → `EM_ANALISE` → `RESOLVIDA`).
+4. **Fechamento e Relatório Mensal com Validação Humana**:
+   * Balanço consolidado de receitas PJ, despesas dedutíveis, pró-labore e saldo líquido.
+   * Fluxo de validação formal pelo contador antes do encerramento da competência.
+5. **Storage de Arquivos Desacoplado**:
+   * Armazenamento seguro de arquivos em diretório de storage com geração de identificadores UUID e endpoint de download autenticado.
+6. **Interface Moderna e Responsiva**:
+   * Desenvolvida em **Angular** (Standalone Components) com paleta corporativa elegante: **Buriti Corporativo (`#6B3B31`)**, **Cinza Grafite (`#212529`)**, **Verde Sucesso (`#2EA44F`)** e **Azul Foco (`#0066CC`)**.
+
+---
+
+## 🏗️ Arquitetura e Stack Tecnológica
+
+* **Frontend**: Angular 20 (Standalone Components, Signals, Router, Interceptors, Zone.js).
+* **Backend Nativo**: Spring Boot 3.3+ / Java 21 LTS, Spring Security, Spring Data JPA, JJWT, Apache PDFBox, H2 / PostgreSQL.
+* **Runner Cloud (AI Studio)**: Node.js 22 + Express com espelhamento determinístico de 100% dos endpoints REST do Spring Boot para execução em ambiente containerizado.
+* **Containers & DevOps**: Dockerfile multi-stage e Docker Compose prontos para produção.
+
+---
+
+## 💻 Como Executar
+
+### 1. Execução via Docker Compose (Recomendado para ambiente completo)
+Para subir o backend Spring Boot com persistência de dados em um único comando:
+
+```bash
+docker compose up --build
+```
+A API estará disponível em `http://localhost:8080/api/v1`.
+
+---
+
+### 2. Execução do Backend Spring Boot (Maven)
+Requer **Java 21** (ou 17+) e **Maven**:
 
 ```bash
 cd backend
 mvn clean spring-boot:run
 ```
 
-No primeiro start, se não houver nenhum usuário no banco, um administrador padrão é
-criado automaticamente (ver log de inicialização):
+#### Credenciais Padrão Pré-carregadas:
+| Perfil | E-mail | Senha | Finalidade |
+|---|---|---|---|
+| **Administrador** | `admin@contabilit.com.br` | `admin123` | Gestão de equipe e configurações |
+| **Contador** | `contador@contabilit.com.br` | `contador123` | Operação e validação contábil |
+| **Cliente Dev PJ** | `cliente@empresa.com.br` | `cliente123` | Portal do desenvolvedor / PJ |
 
-```
-admin@contabilit.com.br / admin123
-```
+*Em produção, configure a variável de ambiente `APP_JWT_SECRET` com uma chave criptográfica forte.*
 
-**Troque essa senha em produção.** Com esse login, o ADMIN pode criar os demais usuários
-(CONTADOR e CLIENTE) em `/usuarios` — um usuário CLIENTE precisa estar vinculado a um
-`Cliente` já cadastrado.
+---
 
-Configurações relevantes em `application.properties` (ou variáveis de ambiente):
-- `app.cors.allowed-origins` — origem do frontend (padrão `http://localhost:4200`)
-- `app.jwt.secret` (`APP_JWT_SECRET`) — segredo de assinatura do token (32+ caracteres)
-- `app.jwt.expiracao-ms` — validade do token (padrão 8h)
-- `app.storage.path` — pasta onde os arquivos enviados são salvos (padrão `./storage`)
-
-## Executar frontend
-
-Requer Node.js/npm.
+### 3. Execução do Frontend Angular
+Requer **Node.js 22** e **npm**:
 
 ```bash
 cd frontend
 npm install
 npm start
 ```
+Acesse `http://localhost:4200` no seu navegador.
 
-Acesse `http://localhost:4200` e faça login com o admin padrão (ou um usuário criado por ele).
+---
 
-Para build de produção (usa `environment.prod.ts`, com `apiUrl` relativo `/api/v1`):
+### 4. Execução Integrada no Google AI Studio
+No ambiente de contêiner do AI Studio, a aplicação roda de forma unificada na porta **3000** através do comando:
 
 ```bash
-npm run build
+npm run dev
 ```
 
-## Domínio
+---
+
+## 📁 Estrutura do Repositório
 
 ```
-Cliente
- └── Competencia (ano/mês; ABERTA → EM_PROCESSAMENTO → AGUARDANDO_VALIDACAO → VALIDADA/PENDENTE → ENCERRADA)
-      ├── Documento (RECEBIDO → EM_ANALISE/PENDENTE → VALIDADO/REJEITADO)
-      ├── Lancamento (RECEITA/DESPESA)
-      ├── Pendencia (ABERTA → EM_ANALISE → RESOLVIDA/CANCELADA)
-      └── Relatorio (1:1 — GERADO → EM_REVISAO → VALIDADO/DEVOLVIDO → FINALIZADO)
-
-Usuario (login) — ADMIN | CONTADOR | CLIENTE (CLIENTE vinculado a um Cliente)
+├── backend/                  # Backend nativo Spring Boot (Java 21)
+│   ├── pom.xml               # Dependências Maven
+│   ├── Dockerfile            # Imagem de build e runtime do Spring Boot
+│   └── src/main/java/com/contabot/
+│       ├── config/           # Cors, DataSeeder e configurações
+│       ├── controller/       # Controllers REST versionados (/api/v1)
+│       ├── dto/              # Records de request e response
+│       ├── exception/        # Tratamento global de erros (ApiExceptionHandler)
+│       ├── model/            # Entidades JPA (Cliente, Competencia, etc.)
+│       ├── repository/       # Repositórios Spring Data JPA
+│       ├── security/         # Spring Security, JWT Filter e Service
+│       └── service/          # Lógica de negócio, validação e extração
+├── frontend/                 # Aplicação Web Angular (v20 Standalone)
+│   ├── angular.json          # Configuração Angular CLI com Polyfills
+│   ├── src/app/features/     # Módulos: Dashboard, Clientes, Competências, etc.
+│   └── src/styles.css        # Identidade visual com paleta corporativa
+├── server.js                 # Runner Node.js/Express para o preview em nuvem
+├── docker-compose.yml        # Orquestração do ambiente
+├── REGRAS_DE_NEGOCIO_E_APIS.md # Especificação detalhada de regras e endpoints
+└── README.md                 # Este documento
 ```
 
-Validação de documentos é determinística (`ValidacaoService`): confere data, valor,
-vínculo cliente/competência e duplicidade por identificador. Sem IA.
+---
 
-## Quem pode fazer o quê
+## 📖 Documentação Detalhada
 
-| Ação | ADMIN | CONTADOR | CLIENTE |
-|---|---|---|---|
-| Ver/gerenciar clientes | ✅ | ✅ | só o próprio (`/clientes/me`) |
-| Criar competência | ✅ | ✅ | ❌ |
-| Ver competências/documentos/lançamentos/pendências/relatórios | ✅ (todos) | ✅ (todos) | ✅ (só os seus) |
-| Enviar documentos | ✅ | ✅ | ✅ (só para si) |
-| Validar/rejeitar documento, resolver pendência, validar/devolver relatório | ✅ | ✅ | ❌ |
-| Gerenciar usuários (`/usuarios`) | ✅ | ❌ | ❌ |
+Para consultar a especificação completa de regras fiscais de TI, enquadramentos, diagramas de estado e documentação de todos os endpoints REST, consulte o arquivo:
 
-## Endpoints principais
+👉 **[REGRAS_DE_NEGOCIO_E_APIS.md](./REGRAS_DE_NEGOCIO_E_APIS.md)**
 
-```
-POST                  /api/v1/auth/login
-GET/POST/DELETE       /api/v1/usuarios                (ADMIN)
-GET/POST/PUT/DELETE   /api/v1/clientes                (GET /clientes/me para o papel CLIENTE)
-GET/POST              /api/v1/competencias            (?clienteId= opcional)
-GET                   /api/v1/competencias/{id}        (detalhe completo)
-GET                   /api/v1/competencias/minha-atual (papel CLIENTE)
-PUT                   /api/v1/competencias/{id}/status
-GET/PUT               /api/v1/documentos               (?competenciaId= opcional)
-POST                  /api/v1/documentos/upload?clienteId=&competenciaId=
-GET                   /api/v1/documentos/{id}/arquivo   (download)
-GET/POST/PUT/DELETE   /api/v1/lancamentos              (?competenciaId= opcional)
-GET/POST/PUT          /api/v1/pendencias               (?competenciaId=/?status= opcionais)
-GET/POST              /api/v1/relatorios
-POST                  /api/v1/relatorios/competencias/{competenciaId}
-POST                  /api/v1/relatorios/{id}/validar
-POST                  /api/v1/relatorios/{id}/devolver
-GET                   /api/v1/dashboard                 (ADMIN/CONTADOR)
-```
+---
 
-## Notas de manutenção / limitações conhecidas
+## 📄 Licença
 
-- Extração de dados é *best-effort*: cobre XML de NF-e e PDF com camada de texto. Imagens
-  escaneadas continuam sem extração automática (ficam `PENDENTE` para preenchimento manual).
-- Storage local em disco — adequado para o MVP; trocar por object storage real é uma
-  migração isolada em `FileStorageService`, sem afetar quem o consome.
-- Segredo JWT tem um valor padrão de desenvolvimento no `application.properties` —
-  **defina `APP_JWT_SECRET` em produção**.
-- Testes cobrem as regras de negócio centrais (validação de documento, duplicidade de
-  competência, ciclo de vida de pendência, JWT, escopo por cliente), não a cobertura
-  completa dos controllers.
+Projeto desenvolvido para automação contábil especializada em tecnologia. Todos os direitos reservados.

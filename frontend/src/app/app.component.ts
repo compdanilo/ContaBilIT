@@ -12,22 +12,22 @@ import { AuthService } from './core/auth.service';
       <aside>
         <div class="brand">
           <span class="mark">C</span>
-          <div><b>ContabilIT</b><small>Facilite sua vida contábil.</small></div>
+          <div><b>ContabilIT</b><small>Contabilidade para TI & Devs</small></div>
         </div>
         <nav>
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">⌂ <span>Dashboard</span></a>
-          <a *ngIf="auth.ehContadorOuAdmin()" routerLink="/clientes" routerLinkActive="active">◉ <span>Clientes</span></a>
+          <a *ngIf="auth.ehContadorOuAdmin()" routerLink="/clientes" routerLinkActive="active">◉ <span>Clientes TI</span></a>
           <a *ngIf="auth.ehContadorOuAdmin()" routerLink="/competencias" routerLinkActive="active">▤ <span>Competências</span></a>
-          <a routerLink="/documentos" routerLinkActive="active">□ <span>Documentos</span></a>
+          <a routerLink="/documentos" routerLinkActive="active">□ <span>Documentos TI</span></a>
           <a routerLink="/pendencias" routerLinkActive="active">! <span>Pendências</span></a>
           <a routerLink="/relatorios" routerLinkActive="active">▣ <span>Relatórios</span></a>
           <a *ngIf="auth.papel() === 'ADMIN'" routerLink="/usuarios" routerLinkActive="active">⚙ <span>Usuários</span></a>
         </nav>
-        <div class="side-foot">ContabilIT · BuritiT Solutions</div>
+        <div class="side-foot">ContabilIT · Contabilidade PJ & Devs</div>
       </aside>
       <main>
         <header>
-          <div><h1>ContabilIT</h1><p>Automação contábil com validação humana.</p></div>
+          <div><h1>ContabilIT</h1><p>Contabilidade digital especializada em profissionais, devs e consultorias de TI.</p></div>
           <div class="user-box">
             <div class="avatar">{{ auth.usuario()?.nome?.charAt(0) ?? '?' }}</div>
             <div class="user-info">

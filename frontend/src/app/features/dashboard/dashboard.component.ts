@@ -13,30 +13,30 @@ const MESES = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
   template: `
     <div class="page" *ngIf="auth.ehContadorOuAdmin(); else painelCliente">
       <div class="section-head">
-        <div><h2>Painel de validação</h2><p>Acompanhamento operacional das competências dos seus clientes.</p></div>
+        <div><h2>Painel Contábil TI</h2><p>Acompanhamento fiscal, apuração de Fator R e rotinas mensais dos seus clientes de tecnologia.</p></div>
       </div>
       <div class="cards">
-        <article><span>Clientes</span><strong>{{ resumo?.clientes ?? 0 }}</strong><em>cadastrados</em></article>
+        <article><span>Clientes TI</span><strong>{{ resumo?.clientes ?? 0 }}</strong><em>cadastrados</em></article>
         <article><span>Aguardando revisão</span><strong>{{ resumo?.competenciasAguardandoValidacao ?? 0 }}</strong><em>competências</em></article>
         <article><span>Validadas</span><strong>{{ resumo?.competenciasValidadas ?? 0 }}</strong><em>competências</em></article>
         <article><span>Com pendências</span><strong>{{ resumo?.competenciasComPendencias ?? 0 }}</strong><em>competências</em></article>
       </div>
       <div class="cards">
-        <article><span>Documentos</span><strong>{{ resumo?.totalDocumentos ?? 0 }}</strong><em>recebidos no total</em></article>
+        <article><span>Documentos fiscais</span><strong>{{ resumo?.totalDocumentos ?? 0 }}</strong><em>recebidos no total</em></article>
         <article><span>Pendências abertas</span><strong>{{ resumo?.pendenciasAbertas ?? 0 }}</strong><em>a resolver</em></article>
-        <article><span>Receitas</span><strong>{{ resumo?.receitas | currency:'BRL' }}</strong><em>consolidado</em></article>
-        <article><span>Despesas</span><strong>{{ resumo?.despesas | currency:'BRL' }}</strong><em>consolidado</em></article>
+        <article><span>Receitas Tech</span><strong>{{ resumo?.receitas | currency:'BRL' }}</strong><em>consolidado PJ</em></article>
+        <article><span>Despesas operacionais</span><strong>{{ resumo?.despesas | currency:'BRL' }}</strong><em>consolidado</em></article>
       </div>
       <div class="quick">
         <a routerLink="/competencias">+ Nova competência</a>
-        <a routerLink="/documentos">↑ Enviar documentos</a>
-        <a routerLink="/clientes">+ Cadastrar cliente</a>
+        <a routerLink="/documentos">↑ Enviar NFS-e / Invoices</a>
+        <a routerLink="/clientes">+ Cadastrar cliente TI</a>
       </div>
       <p class="danger" *ngIf="erro">{{ erro }}</p>
       <div class="panel">
-        <h3>Competências aguardando revisão</h3>
+        <h3>Competências de TI aguardando revisão</h3>
         <table>
-          <thead><tr><th>Cliente</th><th>Competência</th><th>Documentos</th><th>Pendências</th><th></th></tr></thead>
+          <thead><tr><th>Cliente PJ / Dev</th><th>Competência</th><th>Documentos</th><th>Pendências</th><th></th></tr></thead>
           <tbody>
             <tr *ngFor="let c of aguardandoRevisao">
               <td>{{ c.cliente.nome }}</td>
@@ -54,7 +54,7 @@ const MESES = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
     <ng-template #painelCliente>
       <div class="page">
         <div class="section-head">
-          <div><h2>Olá, {{ auth.usuario()?.nome }}</h2><p>Este é o resumo da sua situação contábil.</p></div>
+          <div><h2>Olá, {{ auth.usuario()?.nome }}</h2><p>Resumo fiscal da sua PJ de TI: NFS-e, apuração de impostos e status contábil.</p></div>
         </div>
         <p class="danger" *ngIf="erro">{{ erro }}</p>
         <div *ngIf="minhaCompetencia as d">
