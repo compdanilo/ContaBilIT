@@ -1,0 +1,7 @@
+{
+  "name": "ContaBilIT",
+  "description": "Automação contábil com validação humana - gestão de clientes, competências, documentos e relatórios.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
