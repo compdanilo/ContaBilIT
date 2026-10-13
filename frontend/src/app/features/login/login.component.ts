@@ -3,21 +3,27 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
+import { TourModalComponent } from '../tour/tour-modal.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TourModalComponent],
   template: `
     <div class="login-wrapper">
-      <!-- Header sutil com status da plataforma -->
+      <!-- Header sutil com status da plataforma e botão de tour -->
       <header class="login-header">
         <div class="header-brand">
           <span class="header-mark">C</span>
           <span class="header-title">ContaBilIT</span>
         </div>
-        <div class="header-badge">
-          <span class="pulse-dot"></span>
-          <span>Plataforma Online</span>
+        <div class="header-actions">
+          <button class="btn-tour-header" (click)="abrirTour = true">
+            🎬 Tour Guiado do Sistema
+          </button>
+          <div class="header-badge">
+            <span class="pulse-dot"></span>
+            <span>Plataforma Online</span>
+          </div>
         </div>
       </header>
 
@@ -103,7 +109,12 @@ import { AuthService } from '../../core/auth.service';
 
           <!-- Acesso Rápido para Demonstração -->
           <div class="demo-section">
-            <span class="demo-title">Contas de acesso rápido para teste:</span>
+            <div class="demo-header-row">
+              <span class="demo-title">Acesso Rápido para Teste:</span>
+              <button type="button" class="btn-text-tour" (click)="abrirTour = true">
+                ✨ Ver Tour Guiado
+              </button>
+            </div>
             <div class="demo-chips">
               <button
                 type="button"
@@ -152,6 +163,13 @@ import { AuthService } from '../../core/auth.service';
           </p>
         </div>
       </footer>
+
+      <!-- Modal de Demonstração / Tour Guiado -->
+      <app-tour-modal
+        *ngIf="abrirTour"
+        (fechar)="abrirTour = false"
+        (entrarPerfil)="entrarComPerfil($event)"
+      />
     </div>
   `,
   styles: [`
@@ -207,6 +225,34 @@ import { AuthService } from '../../core/auth.service';
       font-weight: 700;
       color: #593725;
       letter-spacing: -0.3px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-tour-header {
+      background: rgba(255, 253, 250, 0.95);
+      border: 1px solid #f0c6ad;
+      color: #81391f;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(92, 48, 25, 0.06);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-tour-header:hover {
+      background: #fff0e6;
+      border-color: #d98b62;
+      transform: translateY(-1px);
     }
 
     .header-badge {
@@ -468,12 +514,34 @@ import { AuthService } from '../../core/auth.service';
       gap: 10px;
     }
 
+    .demo-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .demo-title {
       font-size: 11px;
       font-weight: 600;
       color: #81746b;
       text-transform: uppercase;
       letter-spacing: 0.4px;
+    }
+
+    .btn-text-tour {
+      background: none;
+      border: none;
+      color: #c65d2e;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.15s ease;
+    }
+
+    .btn-text-tour:hover {
+      color: #a94320;
+      text-decoration: underline;
     }
 
     .demo-chips {
@@ -577,6 +645,10 @@ import { AuthService } from '../../core/auth.service';
       .chip {
         text-align: left;
       }
+      .login-header {
+        flex-direction: column;
+        gap: 10px;
+      }
     }
   `],
 })
@@ -589,11 +661,24 @@ export class LoginComponent {
   erro = '';
   entrando = false;
   mostrarSenha = false;
+  abrirTour = false;
 
   preencher(email: string, pass: string): void {
     this.email = email;
     this.senha = pass;
     this.erro = '';
+  }
+
+  entrarComPerfil(papel: 'CLIENTE' | 'CONTADOR' | 'ADMIN'): void {
+    this.abrirTour = false;
+    if (papel === 'CLIENTE') {
+      this.preencher('cliente@empresa.com.br', 'cliente123');
+    } else if (papel === 'CONTADOR') {
+      this.preencher('contador@contabilit.com.br', 'contador123');
+    } else {
+      this.preencher('admin@contabilit.com.br', 'admin123');
+    }
+    this.entrar();
   }
 
   entrar(): void {
