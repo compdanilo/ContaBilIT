@@ -24,17 +24,17 @@ import { AuthService } from '../../core/auth.service';
     </div>
   `,
   styles: [`
-    .login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background-color:#F8F9FA;background-image:url('/assets/images/bg_ondas_quentes.jpg');background-size:cover;background-position:center;background-repeat:no-repeat}
-    .login-card{background:rgba(255,255,255,0.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(222,226,230,0.85);border-radius:16px;box-shadow:0 12px 36px rgba(107,59,49,0.12);padding:36px;width:350px;display:flex;flex-direction:column;gap:10px}
+    .login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f9eee4 url('/assets/images/contabilit-background.png') center / cover fixed no-repeat}
+    .login-card{background:rgba(255,253,250,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(234,223,215,.95);border-radius:16px;box-shadow:0 8px 28px rgba(92,48,25,.09);padding:36px;width:350px;display:flex;flex-direction:column;gap:10px}
     .login-card .brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-    .login-card .mark{width:38px;height:38px;border-radius:10px;background:#6B3B31;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
-    .login-card b{display:block;font-size:16px;color:#6B3B31;font-weight:700}
-    .login-card small{color:#6C757D;font-size:11px}
-    .login-card label{font-size:12px;font-weight:600;color:#495057;margin-top:6px}
-    .login-card input{border:1px solid #DEE2E6;border-radius:8px;padding:10px 12px;font-size:13px;color:#212529;outline:none;background:#FFFFFF}
-    .login-card input:focus{border-color:#0066CC;box-shadow:0 0 0 3px rgba(0,102,204,.15)}
-    .login-card button{margin-top:16px;background:#2EA44F;color:#FFFFFF;border:0;border-radius:8px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;transition:background-color .15s ease}
-    .login-card button:hover:not(:disabled){background:#268B42}
+    .login-card .mark{width:38px;height:38px;border-radius:11px;background:#fff4e9;color:#a94320;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;box-shadow:0 4px 12px #4c1e1530}
+    .login-card b{display:block;font-size:16px;color:#593725;font-weight:700}
+    .login-card small{color:#81746b;font-size:11px}
+    .login-card label{font-size:12px;font-weight:600;color:#593725;margin-top:6px}
+    .login-card input{border:1px solid #e3d4c9;border-radius:8px;padding:11px 12px;font-size:13px;color:#342820;outline:none;background:rgba(255,254,252,.98)}
+    .login-card input:focus{border-color:#d98b62;box-shadow:0 0 0 3px rgba(198,93,46,.10)}
+    .login-card button{margin-top:16px;background:#c65d2e;color:#FFFFFF;border:1px solid #c65d2e;border-radius:8px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;transition:background-color .18s ease;box-shadow:0 3px 8px #a9432018}
+    .login-card button:hover:not(:disabled){background:#a94320}
     .login-card button:disabled{opacity:.6;cursor:default}
   `],
 })
