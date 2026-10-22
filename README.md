@@ -122,7 +122,7 @@ npm run dev
 │   └── src/styles.css        # Identidade visual com paleta corporativa
 ├── server.js                 # Runner Node.js/Express para o preview em nuvem
 ├── docker-compose.yml        # Orquestração do ambiente
-├── REGRAS_DE_NEGOCIO_E_APIS.md # Especificação detalhada de regras e endpoints
+├── DOCUMENTACAO.md           # Documento unificado: regras de negócio de TI e APIs
 └── README.md                 # Este documento
 ```
 
@@ -130,9 +130,9 @@ npm run dev
 
 ## 📖 Documentação Detalhada
 
-Para consultar a especificação completa de regras fiscais de TI, enquadramentos, diagramas de estado e documentação de todos os endpoints REST, consulte o arquivo:
+Para consultar a especificação completa de regras fiscais de TI, enquadramentos, diagramas de estado e documentação de todos os endpoints REST, consulte o arquivo unificado:
 
-👉 **[REGRAS_DE_NEGOCIO_E_APIS.md](./REGRAS_DE_NEGOCIO_E_APIS.md)**
+👉 **[DOCUMENTACAO.md](./DOCUMENTACAO.md)**
 
 ---
 
