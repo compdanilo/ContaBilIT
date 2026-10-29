@@ -359,6 +359,86 @@ async function runTests() {
   const relValidado = await resValRel.json();
   assert(resValRel.status === 200 && relValidado.status === 'VALIDADO', 'Aprovação formal do relatório pelo contador (HTTP 200 OK)');
 
+  // ----------------------------------------------------
+  // 9. INTEGRAÇÃO EXTERNA (RECEITA FEDERAL VIA BRASILAPI)
+  // ----------------------------------------------------
+  console.log('\x1b[36m[9/10] Testando Integração Externa (Receita Federal via BrasilAPI)...\x1b[0m');
+
+  // Consulta de CNPJ na BrasilAPI (Receita Federal)
+  const resCnpj = await fetch(`${BASE_URL}/integracoes/cnpj/00000000000191`, {
+    headers: { 'Authorization': `Bearer ${tokenContador}` }
+  });
+  const dataCnpj = await resCnpj.json();
+  assert(
+    resCnpj.status === 200 &&
+    dataCnpj.razaoSocial &&
+    dataCnpj.cnpj &&
+    dataCnpj.situacaoCadastral,
+    'Consulta externa de CNPJ via BrasilAPI / Receita Federal retorna dados corporativos e CNAE'
+  );
+
+  // ----------------------------------------------------
+  // 10. ASSISTENTE DE INTELIGÊNCIA ARTIFICIAL (GEMINI 3.8 FLASH)
+  // ----------------------------------------------------
+  console.log('\x1b[36m[10/10] Testando Assistente Contábil de IA (Gemini 3.8 Flash)...\x1b[0m');
+
+  // Extração e estruturação inteligente de lançamento
+  const resIaLanc = await fetch(`${BASE_URL}/ia/extrair-lancamento`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenCliente}`
+    },
+    body: JSON.stringify({ prompt: 'Paguei fatura de US$ 150 na AWS no dia 10 referente a servidores de nuvem' })
+  });
+  const dataIaLanc = await resIaLanc.json();
+  assert(
+    resIaLanc.status === 200 &&
+    dataIaLanc.tipo === 'DESPESA' &&
+    dataIaLanc.valor > 0 &&
+    dataIaLanc.descricao,
+    'IA Gemini extrai e estrutura lançamento financeiro a partir de texto informal'
+  );
+
+  // Análise e autoclassificação de documento fiscal
+  const resIaDoc = await fetch(`${BASE_URL}/ia/analisar-documento`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenCliente}`
+    },
+    body: JSON.stringify({
+      texto: 'NFS-e 2026/045 - Prestador: Fullstack Cloud Ltda - Tomador: TechVentures Inc - Valor: R$ 18.000,00 - Serviço: Desenvolvimento de Software Backend e APIs',
+      nomeArquivo: 'NFSE-2026-045.pdf'
+    })
+  });
+  const dataIaDoc = await resIaDoc.json();
+  assert(
+    resIaDoc.status === 200 &&
+    dataIaDoc.tipo === 'NOTA_FISCAL' &&
+    dataIaDoc.identificador &&
+    dataIaDoc.cnaeSugerido,
+    'IA Gemini classifica documento fiscal, extrai identificador e sugere CNAE de TI'
+  );
+
+  // Auditoria contábil e parecer de Fator R automatizado com IA
+  const resIaParecer = await fetch(`${BASE_URL}/ia/parecer-fiscal`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenContador}`
+    },
+    body: JSON.stringify({ competenciaId: 1 })
+  });
+  const dataIaParecer = await resIaParecer.json();
+  assert(
+    resIaParecer.status === 200 &&
+    typeof dataIaParecer.parecer === 'string' &&
+    typeof dataIaParecer.fatorRCalculado === 'number' &&
+    dataIaParecer.enquadramentoSugerido,
+    'IA Gemini gera parecer fiscal contábil automatizado com apuração do Fator R e Anexo do Simples'
+  );
+
   // Limpeza do cliente de teste
   await fetch(`${BASE_URL}/clientes/${novoCli.id}`, {
     method: 'DELETE',

@@ -179,3 +179,48 @@ export interface DashboardResumo {
   despesas: number;
   saldo: number;
 }
+
+export interface CnpjConsultaResponse {
+  cnpj: string;
+  razaoSocial: string;
+  nomeFantasia: string;
+  cnaePrincipal: string;
+  cnaeCodigo: string | null;
+  situacaoCadastral: string;
+  email: string | null;
+  telefone: string | null;
+  logradouro: string;
+  municipio: string;
+  uf: string;
+  cep: string;
+  naturezaJuridica: string;
+}
+
+export interface IaSugestaoLancamento {
+  tipo: TipoLancamento;
+  descricao: string;
+  valor: number;
+  vencimento: string;
+  categoria?: string;
+  impactaFatorR?: boolean;
+  observacaoFiscal?: string;
+}
+
+export interface IaAnaliseDocumento {
+  tipo: TipoDocumento;
+  identificador?: string;
+  valor?: number;
+  dataDocumento?: string;
+  razaoSocialContraparte?: string;
+  cnaeSugerido?: string;
+  resumoContabil?: string;
+}
+
+export interface IaParecerFiscal {
+  parecer: string;
+  fatorRCalculado?: number;
+  enquadramentoSugerido?: string;
+  pontosAtencao?: string[];
+  aprovacaoRecomendada: boolean;
+}
+

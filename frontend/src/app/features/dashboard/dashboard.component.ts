@@ -13,7 +13,10 @@ const MESES = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
   template: `
     <div class="page" *ngIf="auth.ehContadorOuAdmin(); else painelCliente">
       <div class="section-head">
-        <div><h2>Painel Contábil TI</h2><p>Acompanhamento fiscal, apuração de Fator R e rotinas mensais dos seus clientes de tecnologia.</p></div>
+        <div>
+          <h2>Painel Contábil TI</h2>
+          <p>Acompanhamento fiscal, apuração de Fator R e rotinas mensais dos seus clientes de tecnologia.</p>
+        </div>
       </div>
       <div class="cards">
         <article><span>Clientes TI</span><strong>{{ resumo?.clientes ?? 0 }}</strong><em>cadastrados</em></article>
@@ -32,6 +35,7 @@ const MESES = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
         <a routerLink="/documentos">↑ Enviar NFS-e / Invoices</a>
         <a routerLink="/clientes">+ Cadastrar cliente TI</a>
       </div>
+
       <p class="danger" *ngIf="erro">{{ erro }}</p>
       <div class="panel">
         <h3>Competências de TI aguardando revisão</h3>
@@ -69,6 +73,7 @@ const MESES = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
             <a routerLink="/documentos">↑ Enviar documentos</a>
           </div>
         </div>
+
         <div class="panel" *ngIf="!minhaCompetencia && !erro">
           <p>Você ainda não possui nenhuma competência aberta. Fale com seu contador.</p>
         </div>

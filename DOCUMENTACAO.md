@@ -412,6 +412,108 @@ Retorna métricas consolidadas em tempo real para a equipe contábil.
 
 ---
 
+### 5.10. Integração Externa — Receita Federal via BrasilAPI
+
+O ContabilIT conecta-se à **BrasilAPI** para enriquecimento e validação automática de dados fiscais:
+
+#### `GET /api/v1/integracoes/cnpj/{cnpj}`
+Consulta em tempo real a base cadastral oficial da **Receita Federal** via **BrasilAPI** (`https://brasilapi.com.br/api/cnpj/v1/{cnpj}`) para preenchimento automatizado de razão social, nome fantasia, endereço, situação cadastral e CNAE principal de tecnologia (ex.: *6201-5/01 - Desenvolvimento de programas de computador*).
+* **Acesso**: `ADMIN`, `CONTADOR`, `CLIENTE`
+* **Parâmetros**: `cnpj` (14 dígitos numéricos ou formatado com pontuação)
+* **Response (200 OK)**:
+  ```json
+  {
+    "cnpj": "00000000000191",
+    "razaoSocial": "BANCO DO BRASIL SA",
+    "nomeFantasia": "DIRECAO GERAL",
+    "cnaePrincipal": "Bancos múltiplos, com carteira comercial",
+    "cnaeCodigo": "6422100",
+    "situacaoCadastral": "ATIVA",
+    "email": "consultas@bb.com.br",
+    "telefone": "(61) 3493-9002",
+    "logradouro": "SBS QUADRA 01",
+    "municipio": "BRASILIA",
+    "uf": "DF",
+    "cep": "70073901",
+    "naturezaJuridica": "Sociedade de Economia Mista"
+  }
+  ```
+
+---
+
+### 5.11. Assistente de Inteligência Artificial Contábil (Gemini 3.8 Flash)
+
+O ContabilIT integra modelos generativos de última geração (`@google/genai` com o modelo `gemini-3.8-flash`) no lado do servidor para automação de tarefas fiscais repetitivas, autopreenchimento de formulários e pareceres de conformidade contábil para o setor de TI:
+
+#### `POST /api/v1/ia/extrair-lancamento`
+Interpreta texto informal, mensagens de faturamento, faturas de cloud (AWS, Azure, GCP) ou pró-labore dos sócios e converte em dados estruturados prontos para preenchimento:
+* **Acesso**: `ADMIN`, `CONTADOR`, `CLIENTE`
+* **Request Body**:
+  ```json
+  {
+    "prompt": "Paguei fatura de US$ 150 na AWS no dia 10 referente a infraestrutura dos clientes"
+  }
+  ```
+* **Response (200 OK)**:
+  ```json
+  {
+    "tipo": "DESPESA",
+    "descricao": "Serviços de Computação em Nuvem (AWS Cloud Infrastructure)",
+    "valor": 847.50,
+    "vencimento": "2026-10-10",
+    "categoria": "Cloud & Infraestrutura",
+    "impactaFatorR": false,
+    "observacaoFiscal": "Despesa operacional dedutível para apuração de IRPJ/CSLL no Lucro Real/Presumido ou custo operacional do Simples."
+  }
+  ```
+
+#### `POST /api/v1/ia/analisar-documento`
+Analisa o conteúdo textual ou OCR de NFS-e, invoices internacionais de desenvolvedores (Deel, Wise, Upwork) ou comprovantes de arrecadação para autoclassificação contábil e sugestão de CNAE:
+* **Acesso**: `ADMIN`, `CONTADOR`, `CLIENTE`
+* **Request Body**:
+  ```json
+  {
+    "texto": "NFS-e 2026/045 - Prestador: Fullstack Cloud Ltda - Tomador: TechVentures Inc - Valor: R$ 18.000,00 - Serviço: Desenvolvimento de Software Backend e APIs",
+    "nomeArquivo": "NFSE-2026-045.pdf"
+  }
+  ```
+* **Response (200 OK)**:
+  ```json
+  {
+    "tipo": "NOTA_FISCAL",
+    "identificador": "NFS-e 2026/045",
+    "valor": 18000.00,
+    "dataDocumento": "2026-10-29",
+    "razaoSocialContraparte": "TechVentures Inc",
+    "cnaeSugerido": "6201-5/01 - Desenvolvimento de programas de computador sob encomenda",
+    "resumoContabil": "Prestação de serviços de desenvolvimento de software com enquadramento no Anexo III mediante Fator R."
+  }
+  ```
+
+#### `POST /api/v1/ia/parecer-fiscal`
+Executa uma auditoria automatizada em tempo real dos lançamentos, documentos, faturamento e pró-labore da competência selecionada, calculando o **Fator R** e gerando o parecer formal do contador:
+* **Acesso**: `ADMIN`, `CONTADOR`
+* **Request Body**:
+  ```json
+  {
+    "competenciaId": 1
+  }
+  ```
+* **Response (200 OK)**:
+  ```json
+  {
+    "parecer": "Competência 10/2026 analisada: O cliente faturou R$ 34.700,00 com desenvolvimento de software e manteve retirada de pró-labore dos sócios de R$ 9.716,00. O Fator R atingiu 28.00%, viabilizando tributação pelo Anexo III do Simples Nacional com economia tributária estimada de 9,5% frente ao Anexo V.",
+    "fatorRCalculado": 28.0,
+    "enquadramentoSugerido": "Anexo III (Alíquota a partir de 6% - Fator R cumprido)",
+    "pontosAtencao": [
+      "Todos os documentos foram conferidos e validados pela contabilidade"
+    ],
+    "aprovacaoRecomendada": true
+  }
+  ```
+
+---
+
 ## 6. Códigos de Status HTTP e Tratamento de Erros
 
 A API adota o padrão unificado de resposta para cenários de exceção:

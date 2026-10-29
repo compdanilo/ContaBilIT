@@ -5,7 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../../core/api.service';
 import { AuthService } from '../../core/auth.service';
 import {
-  CompetenciaDetalhe, Documento, DocumentoAtualizacaoRequest, Lancamento, LancamentoRequest,
+  CompetenciaDetalhe, Documento, DocumentoAtualizacaoRequest, IaParecerFiscal, IaSugestaoLancamento, Lancamento, LancamentoRequest,
   Pendencia, Relatorio, StatusDocumento, TipoLancamento,
 } from '../../core/models';
 
@@ -46,16 +46,43 @@ const MESES = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
       </div>
 
       <div class="panel">
-        <h3>Lançamentos</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <h3 style="margin: 0;">Lançamentos Financeiros</h3>
+          <span style="font-size: 11px; background: var(--brand-soft); color: var(--brand-strong); padding: 3px 8px; border-radius: 6px;">
+            ✨ Assistente de IA Contábil
+          </span>
+        </div>
+
+        <!-- Box de Autopreenchimento com IA -->
+        <div style="background: rgba(255, 245, 238, 0.85); border: 1px dashed var(--brand-border); border-radius: 9px; padding: 14px; margin-bottom: 16px;">
+          <div style="font-size: 12px; font-weight: 600; color: var(--brand-strong); margin-bottom: 4px;">
+            🤖 Autopreenchimento Inteligente por IA (Gemini 3.8 Flash)
+          </div>
+          <p style="font-size: 11px; color: var(--muted); margin: 0 0 10px;">
+            Digite uma descrição livre (ex: <i>"Paguei US$ 150 na AWS no dia 10"</i>, <i>"Recebi R$ 14.000 da Deel por dev backend"</i> ou <i>"Pró-labore R$ 5.200"</i>) e a IA preencherá os campos fiscais:
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <input [(ngModel)]="iaPrompt" placeholder="Digite ou cole aqui a descrição do lançamento..." style="flex: 1; min-width: 260px;" (keyup.enter)="preencherComIa()">
+            <button type="button" (click)="preencherComIa()" [disabled]="extraindoIa || !iaPrompt.trim()" style="background: var(--brand); color: #fff; font-weight: 600;">
+              {{ extraindoIa ? '⏳ Analisando com IA...' : '✨ Preencher com IA' }}
+            </button>
+          </div>
+          <div *ngIf="iaSugestaoInfo" style="margin-top: 8px; font-size: 11px; color: var(--brand-strong); background: #fff; border: 1px solid var(--brand-border); padding: 6px 10px; border-radius: 6px;">
+            <strong>Classificação IA:</strong> {{ iaSugestaoInfo }}
+          </div>
+        </div>
+
         <div class="form-grid four">
           <select [(ngModel)]="novoTipo">
-            <option value="RECEITA">Receita</option>
-            <option value="DESPESA">Despesa</option>
+            <option value="RECEITA">Receita (NFS-e, Invoices)</option>
+            <option value="DESPESA">Despesa (Cloud, Pró-labore, Ferramentas)</option>
           </select>
-          <input [(ngModel)]="novaDescricao" placeholder="Descrição">
-          <input type="number" min="0" step="0.01" [(ngModel)]="novoValor" placeholder="Valor">
+          <input [(ngModel)]="novaDescricao" placeholder="Descrição do lançamento">
+          <input type="number" min="0" step="0.01" [(ngModel)]="novoValor" placeholder="Valor (R$)">
           <input type="date" [(ngModel)]="novoVencimento">
-          <button (click)="adicionarLancamento()" [disabled]="salvandoLancamento">Adicionar</button>
+          <button (click)="adicionarLancamento()" [disabled]="salvandoLancamento" style="background: #593725; color: #fff;">
+            {{ salvandoLancamento ? 'Salvando...' : 'Adicionar Lançamento' }}
+          </button>
         </div>
         <table>
           <thead><tr><th>Tipo</th><th>Descrição</th><th>Valor</th><th>Vencimento</th></tr></thead>
@@ -90,7 +117,12 @@ const MESES = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
       </div>
 
       <div class="panel">
-        <h3>Relatório</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <h3 style="margin: 0;">Relatório de Fechamento</h3>
+          <button *ngIf="auth.ehContadorOuAdmin() && d.relatorio" (click)="gerarParecerIa()" [disabled]="gerandoParecerIa" style="background: var(--brand-soft); color: var(--brand-strong); border-color: var(--brand-border); font-size: 11px; font-weight: 600;">
+            {{ gerandoParecerIa ? '⏳ Auditando...' : '🤖 Gerar Parecer Fiscal com IA' }}
+          </button>
+        </div>
         <div *ngIf="!d.relatorio">
           <p>Nenhum relatório gerado ainda para esta competência.</p>
           <button *ngIf="auth.ehContadorOuAdmin()" (click)="gerarRelatorio()">Gerar relatório</button>
@@ -103,8 +135,23 @@ const MESES = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
             <div><b>{{ r.documentosValidados }}/{{ r.totalDocumentos }}</b><span>Documentos validados</span></div>
             <div><b>{{ r.pendenciasAbertas }}</b><span>Pendências abertas</span></div>
           </div>
-          <p>Status do relatório: <span class="tag">{{ r.status }}</span></p>
-          <p *ngIf="r.observacoes">Observações: {{ r.observacoes }}</p>
+          <p style="margin-top: 14px;">Status do relatório: <span class="tag">{{ r.status }}</span></p>
+
+          <div *ngIf="parecerIa" style="background: rgba(234, 246, 238, 0.9); border: 1px solid #b7dfca; border-radius: 9px; padding: 14px; margin: 14px 0; font-size: 12px; line-height: 1.5;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <strong style="color: #1b5e32; font-size: 13px;">📋 Parecer Fiscal IA — Fator R: {{ parecerIa.fatorRCalculado }}%</strong>
+              <span class="tag" [class.red]="!parecerIa.aprovacaoRecomendada">{{ parecerIa.enquadramentoSugerido }}</span>
+            </div>
+            <p style="margin: 0 0 8px; color: #234d31;">{{ parecerIa.parecer }}</p>
+            <div *ngIf="parecerIa.pontosAtencao?.length">
+              <strong style="color: #234d31;">Pontos de Atenção:</strong>
+              <ul style="margin: 4px 0 0; padding-left: 18px; color: #3b5f46;">
+                <li *ngFor="let pt of parecerIa.pontosAtencao">{{ pt }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <p *ngIf="r.observacoes && !parecerIa">Observações: {{ r.observacoes }}</p>
           <div class="acoes" *ngIf="auth.ehContadorOuAdmin() && r.status !== 'VALIDADO' && r.status !== 'FINALIZADO'">
             <button (click)="validarRelatorio(r)">Validar</button>
             <button class="danger" (click)="mostrarDevolucao = !mostrarDevolucao">Devolver para correção</button>
@@ -132,8 +179,53 @@ export class CompetenciaDetalheComponent {
   novoVencimento = '';
   salvandoLancamento = false;
 
+  iaPrompt = '';
+  extraindoIa = false;
+  iaSugestaoInfo = '';
+
+  gerandoParecerIa = false;
+  parecerIa?: IaParecerFiscal;
+
   mostrarDevolucao = false;
   observacaoDevolucao = '';
+
+  preencherComIa(): void {
+    const prompt = this.iaPrompt.trim();
+    if (!prompt) return;
+    this.extraindoIa = true;
+    this.erro = '';
+    this.api.post<IaSugestaoLancamento>('/ia/extrair-lancamento', { prompt }).subscribe({
+      next: (res) => {
+        this.extraindoIa = false;
+        if (res) {
+          this.novoTipo = res.tipo;
+          this.novaDescricao = res.descricao;
+          this.novoValor = res.valor;
+          this.novoVencimento = res.vencimento;
+          this.iaSugestaoInfo = `${res.categoria || 'TI'} ${res.impactaFatorR ? '• Compõe Fator R (28%)' : ''} — ${res.observacaoFiscal || ''}`;
+        }
+      },
+      error: (e) => {
+        this.extraindoIa = false;
+        this.erro = 'Erro no assistente de IA: ' + e.message;
+      },
+    });
+  }
+
+  gerarParecerIa(): void {
+    this.gerandoParecerIa = true;
+    this.erro = '';
+    this.api.post<IaParecerFiscal>('/ia/parecer-fiscal', { competenciaId: this.competenciaId }).subscribe({
+      next: (res) => {
+        this.gerandoParecerIa = false;
+        this.parecerIa = res;
+      },
+      error: (e) => {
+        this.gerandoParecerIa = false;
+        this.erro = 'Erro ao gerar parecer com IA: ' + e.message;
+      },
+    });
+  }
 
   ngOnInit(): void {
     this.load();

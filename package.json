@@ -9,6 +9,7 @@
     "test:api": "node scripts/test-api.mjs"
   },
   "dependencies": {
+    "@google/genai": "^2.25.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
